@@ -1,7 +1,6 @@
 import { Injectable } from "@angular/core";
 
 import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, Router } from "@angular/router";
-import { ConfigurationService } from 'bdt105angularconfigurationservice';
 import { Toolbox } from "bdt105toolbox/dist";
 import { ConnexionTokenService } from 'bdt105angularconnexionservice';
 
@@ -10,7 +9,7 @@ export class AuthGuard implements CanActivate{
 
     private toolbox: Toolbox = new Toolbox();
     
-    constructor(private router: Router, private configurationService: ConfigurationService, public connexionService: ConnexionTokenService){
+    constructor(private router: Router, public connexionService: ConnexionTokenService){
 
     }
 
@@ -18,7 +17,6 @@ export class AuthGuard implements CanActivate{
         let conn = this.connexionService.isConnected();
         if (!conn){
             this.toolbox.writeToStorage("redirectUrl", state.url, true);
-            let url = this.toolbox.readFromStorage("redirectUrl");
             this.router.navigate(['/login']);
             return false;
         }

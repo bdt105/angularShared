@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { Toolbox } from 'bdt105toolbox/dist';
-import { Observable } from 'rxjs/Observable';
 
 import { ConfigurationService } from "bdt105angularconfigurationservice";
 
@@ -8,10 +7,6 @@ import { ConfigurationService } from "bdt105angularconfigurationservice";
 export class MiscellaneousService {
 
     private toolbox: Toolbox = new Toolbox(); 
-    private translateData : any; 
-    private currentText: string;
-    private language = "FR";
-    private url = './assets/translate' + this.language + '.json';
     private configurationKey = "configurationQuestionnaire";
     private translateKey = "translateQuestionnaire";
 

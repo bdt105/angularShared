@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Toolbox } from 'bdt105toolbox/dist';
 
 import { ConfigurationService } from "bdt105angularconfigurationservice";
+import { ConnexionTokenService } from 'bdt105angularconnexionservice';
 
 @Injectable()
 export class MiscellaneousService {
@@ -9,8 +10,9 @@ export class MiscellaneousService {
     private toolbox: Toolbox = new Toolbox(); 
     private configurationKey = "configurationQuestionnaire";
     private translateKey = "translateQuestionnaire";
+    private connexionKey = "connexionQuestionnaire";
 
-    constructor(public configurationService: ConfigurationService){
+    constructor(public configurationService: ConfigurationService, public connexionTokenService: ConnexionTokenService){
     }
 
     private get(storageKey: string, timer: number){
@@ -38,10 +40,32 @@ export class MiscellaneousService {
     }
 
     getConfigurationPromise(){
-        return this.configurationService.load(this.configurationKey, "./assets/configuration.json", false);
+        return this.configurationService.load(this.configurationKey, "./assets/configuration.json", true);
     }
 
     getTranslationPromise(){
-        return this.configurationService.load(this.configurationKey, "./assets/configuration.json", false);
+        return this.configurationService.load(this.configurationKey, "./assets/configuration.json", true);
     }
+
+    isConnected(){
+        return this.connexionTokenService.isConnected(this.connexionKey);        
+    }
+
+    getCurrentUser(){
+        return this.connexionTokenService.getUser(this.connexionKey);
+    }
+
+    getApplicationName(){
+        return this.configuration().common.applicationName;
+    }
+
+    storeConnexion(data: any, forever: boolean){
+        this.toolbox.writeToStorage(this.connexionKey, data, forever);        
+    }
+
+    cleanConnexion(){
+        this.toolbox.removeFromStorage(this.connexionKey);        
+    }
+
+    
 }

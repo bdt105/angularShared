@@ -8,9 +8,9 @@ import { ConnexionTokenService } from 'bdt105angularconnexionservice';
 export class MiscellaneousService {
 
     private toolbox: Toolbox = new Toolbox(); 
-    private configurationKey = "configurationQuestionnaire";
-    private translateKey = "translateQuestionnaire";
-    private connexionKey = "connexionQuestionnaire";
+    public configurationKey = "configurationQuestionnaire";
+    public translateKey = "translateQuestionnaire";
+    public connexionKey = "connexionQuestionnaire";
 
     constructor(public configurationService: ConfigurationService, public connexionTokenService: ConnexionTokenService){
     }

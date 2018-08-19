@@ -20,5 +20,10 @@ export class GenericComponent implements OnInit{
 
     configuration(){
         return this.miscellaneousService.configuration();
-    }     
+    }
+    
+
+    isConnected(){
+        return this.miscellaneousService.isConnected();
+    }
 }

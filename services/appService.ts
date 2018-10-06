@@ -4,7 +4,7 @@ import { ConfigurationService } from 'bdt105angularconfigurationservice';
 import { ToastController, LoadingController, Platform } from 'ionic-angular';
 import { BarcodeScanner } from '@ionic-native/barcode-scanner';
 import { Toolbox } from 'bdt105toolbox/dist';
-import { Http } from '@angular/http';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable()
 export class Keys {
@@ -23,7 +23,7 @@ export class AppService {
 
     toolbox: Toolbox = new Toolbox();
 
-    constructor(protected http: Http, protected configurationService: ConfigurationService, protected toastController: ToastController, protected platform: Platform,
+    constructor(protected http: HttpClient, protected configurationService: ConfigurationService, protected toastController: ToastController, protected platform: Platform,
         protected miscellaneousService: MiscellaneousService, protected barcodeScanner: BarcodeScanner, protected loadingCtrl: LoadingController) {
     }
 

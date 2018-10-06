@@ -1,7 +1,6 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Toolbox } from 'bdt105toolbox/dist';
-import { RequestOptions } from '@angular/http';
 
 @Injectable()
 export class DatabaseService {

@@ -6,8 +6,6 @@ import { MiscellaneousService } from '../services/miscellaneous.service';
 import { NavController, LoadingController, ToastController } from 'ionic-angular';
 import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer';
 import { Camera, CameraOptions } from '@ionic-native/camera';
-import { CustomService } from '../../services/custom.service';
-import { SettingService } from '../../services/setting.service';
 
 @Component({
     selector: 'imageUploader',
@@ -17,8 +15,11 @@ import { SettingService } from '../../services/setting.service';
 export class ImageUploaderComponent extends GenericComponent {
 
     @Input() apiUrl: string = null;
-    @Input() itemPlus: any;
-    @Output() uploaded = new EventEmitter();
+    @Input() params: any;
+    @Input() imageQuality: number;
+    @Input() imageAllowEdit: boolean;
+    @Output() uploadOk = new EventEmitter();
+    @Output() uploadNok = new EventEmitter();
 
     imageURI: any;
     imageFileName: any;
@@ -27,39 +28,38 @@ export class ImageUploaderComponent extends GenericComponent {
     autoUpload: boolean = true;
     loading: boolean;
 
-    constructor(public miscellaneousService: MiscellaneousService, public navCtrl: NavController,
-        private transfer: FileTransfer, public customService: CustomService, private settingService: SettingService,
+    constructor(public miscellaneousService: MiscellaneousService, public navCtrl: NavController, private transfer: FileTransfer,
         private camera: Camera,
         public loadingCtrl: LoadingController,
         public toastCtrl: ToastController) {
         super(miscellaneousService);
     }
 
-    getImage(source: number, quality: number, allowEdit: boolean) {
+    getImage(source: number) {
         let sou = source == 0 ? this.camera.PictureSourceType.CAMERA : this.camera.PictureSourceType.PHOTOLIBRARY;
         // alert(this.settingService.getItemPlusImageQuality());
         // let quality: number = Number.parseInt(this.settingService.getItemPlusImageQuality());
         // let allowEdit: boolean = this.settingService.getItemPlusImageEdit();
         const options: CameraOptions = {
-            quality: quality,
+            quality: this.imageQuality ? this.imageQuality : 50,
             destinationType: this.camera.DestinationType.FILE_URI,
             sourceType: sou,
-            allowEdit: allowEdit
+            allowEdit: this.imageAllowEdit
         }
          
         this.camera.getPicture(options).then((imageData) => {
             this.imageURI = imageData;
-            this.customService.callbackToast(null, this.translate("Image taken"));
+            // this.customService.callbackToast(null, this.translate("Image taken"));
             if (this.autoUpload) {
-                this.uploadFile();
+                this.uploadFile(this.params);
             }
         }, (err) => {
             console.log(err);
-            this.customService.callbackToast(err, this.translate("Error taking picture"));
+            // this.customService.callbackToast(err, this.translate("Error taking picture"));
         });
     }
 
-    uploadFile() {
+    uploadFile(params: any) {
         let loader = this.loadingCtrl.create({
             content: this.translate("Uploading...")
         });
@@ -75,7 +75,7 @@ export class ImageUploaderComponent extends GenericComponent {
             chunkedMode: false,
             mimeType: "image/jpeg",
             headers: {},
-            params: { itemPlus: this.itemPlus, imageBaseUrl: this.configuration().apiUpload.imageBaseUrl }
+            params: params/*{ itemPlus: this.itemPlus, imageBaseUrl: this.configuration().apiUpload.imageBaseUrl }*/
         }
 
         fileTransfer.upload(this.imageURI, this.apiUrl, options)
@@ -85,15 +85,14 @@ export class ImageUploaderComponent extends GenericComponent {
                     this.data = JSON.stringify(resp);
                     console.log(data);
                     loader.dismiss();
-                    this.customService.callbackToast(data, this.translate("Image uploaded successfully"));
-                    this.uploaded.emit(data.response);
+                    this.uploadOk.emit(data.response);
                     this.loading = false;
                 },
-                (err: any) => {
-                    console.error(err);
+                (error: any) => {
+                    console.error(error);
                     loader.dismiss();
-                    this.error = JSON.stringify(err);
-                    this.customService.callbackToast(err, this.translate("Error uploading image"));
+                    this.uploadOk.emit(error);
+                    this.error = JSON.stringify(error);
                     this.loading = false;
                 });
     }

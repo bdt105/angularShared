@@ -1,0 +1,9 @@
+<div>
+
+    <input type="file" #file (change)="onFileInputChange($event.target.files)">
+
+    <button *ngIf="buttonType == 'button'" ion-button (click)="triggerFileInputClick()">{{buttonText}}</button>
+
+    <ion-icon *ngIf="buttonType == 'icon'" name="cloud-upload" (click)="triggerFileInputClick()"></ion-icon>
+    <span *ngIf="fileToUpload"><br>{{fileToUpload.name}}</span>
+</div>

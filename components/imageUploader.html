@@ -1,0 +1,12 @@
+<ion-item>
+    <button ion-button color="primary" (click)="getImage(0)">
+        <ion-icon name="camera"></ion-icon>&nbsp;{{translate('Take picture')}}
+    </button>
+    <button ion-button color="secondary" (click)="getImage(1)">
+        <ion-icon name="image"></ion-icon>&nbsp;{{translate('Get image')}}
+    </button>
+    <!-- <button *ngIf="imageURI && !autoUpload" ion-button color="danger" (click)="uploadFile()">
+        <ion-icon name="cloud"></ion-icon>&nbsp;{{translate('Upload')}}
+    </button> -->
+    <ion-spinner *ngIf="loading" name="bubbles"></ion-spinner>
+</ion-item>

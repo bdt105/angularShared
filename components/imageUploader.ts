@@ -35,11 +35,11 @@ export class ImageUploaderComponent extends GenericComponent {
         super(miscellaneousService);
     }
 
-    getImage(source: number) {
+    getImage(source: number, quality: number, allowEdit: boolean) {
         let sou = source == 0 ? this.camera.PictureSourceType.CAMERA : this.camera.PictureSourceType.PHOTOLIBRARY;
         // alert(this.settingService.getItemPlusImageQuality());
-        let quality: number = Number.parseInt(this.settingService.getItemPlusImageQuality());
-        let allowEdit: boolean = this.settingService.getItemPlusImageEdit();
+        // let quality: number = Number.parseInt(this.settingService.getItemPlusImageQuality());
+        // let allowEdit: boolean = this.settingService.getItemPlusImageEdit();
         const options: CameraOptions = {
             quality: quality,
             destinationType: this.camera.DestinationType.FILE_URI,

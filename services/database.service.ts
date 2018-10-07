@@ -9,15 +9,15 @@ export class DatabaseService {
     protected token: string;
     protected baseUrl: string;
 
-    private callback(data: any, callback: Function) {
-        if (data && data.status != 200) {
-            console.log(data);
-        }
-        let ret = this.toolbox.parseJson(data._body);
-        if (callback) {
-            callback(ret);
-        }
-    }
+    // private callback(data: any, callback: Function) {
+    //     if (data && data.status != 200) {
+    //         console.log(data);
+    //     }
+    //     let ret = this.toolbox.parseJson(data._body);
+    //     if (callback) {
+    //         callback(ret);
+    //     }
+    // }
 
     constructor(public http: HttpClient, token: string, baseUrl: string) {
         this.token = token
@@ -32,8 +32,8 @@ export class DatabaseService {
         }
 
         this.http.post(this.baseUrl + "table/fresh", body).subscribe(
-            (data: any) => this.callback(data, callbackSuccess),
-            (error: any) => this.callback(error, callbackFailure)
+            (data: any) => callbackSuccess(data),
+            (error: any) => callbackFailure(error)
         );
 
     }
@@ -47,8 +47,8 @@ export class DatabaseService {
         }
 
         this.http.put(this.baseUrl + "table", body).subscribe(
-            (data: any) => this.callback(data, callbackSuccess),
-            (error: any) => this.callback(error, callbackFailure)
+            (data: any) => callbackSuccess(data),
+            (error: any) => callbackFailure(error)
         );
     }
 
@@ -61,8 +61,8 @@ export class DatabaseService {
         };
 
         this.http.delete(this.baseUrl + "table", { "params": body }).subscribe(
-            (data: any) => this.callback(data, callbackSuccess),
-            (error: any) => this.callback(error, callbackFailure)
+            (data: any) => callbackSuccess(data),
+            (error: any) => callbackFailure(error)
         );
     }
 
@@ -87,8 +87,8 @@ export class DatabaseService {
         }
 
         this.http.post(this.baseUrl + "table", body).subscribe(
-            (data: any) => this.callback(data, callbackSuccess),
-            (error: any) => this.callback(error, callbackFailure)
+            (data: any) => callbackSuccess(data),
+            (error: any) => callbackFailure(error)
         );
     }
 
@@ -109,8 +109,8 @@ export class DatabaseService {
         }
 
         this.http.post(this.baseUrl + "query", body).subscribe(
-            (data: any) => this.callback(data, callbackSuccess),
-            (error: any) => this.callback(error, callbackFailure)
+            (data: any) => callbackSuccess(data),
+            (error: any) => callbackFailure(error)
         );
     }
 

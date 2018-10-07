@@ -5,7 +5,7 @@ import { Toolbox } from 'bdt105toolbox/dist';
 @Injectable()
 export class DatabaseService {
 
-    private toolbox: Toolbox = new Toolbox();
+    protected toolbox: Toolbox = new Toolbox();
     protected token: string;
     protected baseUrl: string;
 

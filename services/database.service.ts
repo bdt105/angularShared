@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Toolbox } from 'bdt105toolbox/dist';
+//import { Http } from '@angular/http';
 
 @Injectable()
 export class DatabaseService {
@@ -87,7 +88,7 @@ export class DatabaseService {
         }
 
         this.http.post(this.baseUrl + "table", body).subscribe(
-            (data: any) => callbackSuccess(data),
+            (data: any) => callbackSuccess(data), //this.callback(data, callbackSuccess),
             (error: any) => callbackFailure(error)
         );
     }

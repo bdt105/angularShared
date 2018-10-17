@@ -61,7 +61,7 @@ export class DatabaseService {
             "where": where
         };
 
-        this.http.delete(this.baseUrl + "table", { "params": body }).subscribe(
+        this.http.post(this.baseUrl + "table/delete", body).subscribe(
             (data: any) => callbackSuccess(data),
             (error: any) => callbackFailure(error)
         );

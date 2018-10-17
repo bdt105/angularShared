@@ -10,16 +10,6 @@ export class DatabaseService {
     protected token: string;
     protected baseUrl: string;
 
-    // private callback(data: any, callback: Function) {
-    //     if (data && data.status != 200) {
-    //         console.log(data);
-    //     }
-    //     let ret = this.toolbox.parseJson(data._body);
-    //     if (callback) {
-    //         callback(ret);
-    //     }
-    // }
-
     constructor(public http: HttpClient, token: string, baseUrl: string) {
         this.token = token
         this.baseUrl = baseUrl

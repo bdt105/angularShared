@@ -17,11 +17,10 @@ export class AppService {
 
     protected keys: Keys;
 
-//    public itemsPlusStorageKey = 'itemsPlus';
-    private versionFileUrl = "./assets/version.json";
+    protected versionFileUrl = "./assets/version.json";
     protected applicationName: string;
 
-    toolbox: Toolbox = new Toolbox();
+    protected toolbox: Toolbox = new Toolbox();
 
     constructor(protected http: HttpClient, protected configurationService: ConfigurationService, protected toastController: ToastController, protected platform: Platform,
         protected miscellaneousService: MiscellaneousService, protected barcodeScanner: BarcodeScanner, protected loadingCtrl: LoadingController) {
@@ -229,9 +228,10 @@ export class AppService {
         let url = this.versionFileUrl;
         this.http.get(url).subscribe(
             (data: any) => {
-                let ret = this.toolbox.parseJson(data._body);
-                if (callbackSuccess) {
-                    callbackSuccess(ret)
+                if (data && data.length > 0 && callbackSuccess) {
+                    callbackSuccess(data[0])
+                }else{
+                    console.log("No data: " + url);
                 }
             },
             (error: any) => {

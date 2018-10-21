@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { MiscellaneousService } from './miscellaneous.service';
 import { ConfigurationService } from 'bdt105angularconfigurationservice';
-import { ToastController, LoadingController, Platform } from 'ionic-angular';
+import { ToastController, LoadingController, Platform, AlertController } from 'ionic-angular';
 import { BarcodeScanner } from '@ionic-native/barcode-scanner';
 import { Toolbox } from 'bdt105toolbox/dist';
 import { HttpClient } from '@angular/common/http';
@@ -22,8 +22,9 @@ export class AppService {
 
     protected toolbox: Toolbox = new Toolbox();
 
-    constructor(protected http: HttpClient, protected configurationService: ConfigurationService, protected toastController: ToastController, protected platform: Platform,
-        protected miscellaneousService: MiscellaneousService, protected barcodeScanner: BarcodeScanner, protected loadingCtrl: LoadingController) {
+    constructor(protected http: HttpClient, protected configurationService: ConfigurationService, protected toastController: ToastController,
+        protected platform: Platform, protected miscellaneousService: MiscellaneousService, protected barcodeScanner: BarcodeScanner,
+        protected loadingCtrl: LoadingController, protected alertCtrl: AlertController) {
     }
 
     setVariable(keys: any, applicationName: string, miscellaneousService: MiscellaneousService) {
@@ -35,7 +36,7 @@ export class AppService {
         this.applicationName = applicationName;
         miscellaneousService.currentLanguage = lang ? lang : null;
     }
-    
+
     loadConfiguration() {
         this.configurationService.load(this.keys.configurationKey, "./assets/configuration.json", false);
     }
@@ -44,7 +45,7 @@ export class AppService {
         this.configurationService.load(this.keys.translateKey, "./assets/translation.json", false);
     }
 
-    getApplicationName(){
+    getApplicationName() {
         return this.applicationName;
     }
 
@@ -112,7 +113,7 @@ export class AppService {
         }).catch(err => {
             console.log('Error', err);
         });
-        
+
 
     }
 
@@ -121,7 +122,7 @@ export class AppService {
             successPageParameters = {};
         }
         successPageParameters.scanText = "5dd01066401005";
-//        successPageParameters.scanText = "5601066401005";
+        //        successPageParameters.scanText = "5601066401005";
         if (pageOpenType == 0) {
             navController.setRoot(successPageToLoad, successPageParameters);
         } else {
@@ -188,8 +189,8 @@ export class AppService {
         return this.platform.is('mobile') || this.platform.is('cordova');
     }
 
-    isHorizontal(){
-        return this.platform.isLandscape(); 
+    isHorizontal() {
+        return this.platform.isLandscape();
         //this.screenOrientation.type == 'landscape';// this.screenOrientation.ORIENTATIONS.LANDSCAPE;
     }
 
@@ -230,7 +231,7 @@ export class AppService {
             (data: any) => {
                 if (data && data.length > 0 && callbackSuccess) {
                     callbackSuccess(data[0])
-                }else{
+                } else {
                     console.log("No data: " + url);
                 }
             },
@@ -241,5 +242,32 @@ export class AppService {
                 }
             }
         );
-    }    
+    }
+
+    showAlertForm(callback: Function, title: string, buttons: any, values: any) {
+        if (values) {
+            let alert = this.alertCtrl.create();
+            alert.setTitle(title);
+
+            for (var i = 0; i < values.length; i++) {
+                alert.addInput({
+                    type: values[i].type,
+                    value: values[i],
+                    label: values[i].label,
+                    checked: values[i].checked
+                });
+            }
+
+            for (var i = 0; i < buttons.length; i++) {
+                alert.addButton({
+                    text: buttons[i].label,
+                    handler: data => {
+                        callback(data);
+                    }
+                });
+            }
+
+            alert.present();
+        }
+    }
 }

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { MiscellaneousService } from './miscellaneous.service';
 import { ConfigurationService } from 'bdt105angularconfigurationservice';
-import { ToastController, LoadingController, Platform } from 'ionic-angular';
+import { ToastController, LoadingController, Platform, AlertController } from 'ionic-angular';
 import { BarcodeScanner } from '@ionic-native/barcode-scanner';
 import { Toolbox } from 'bdt105toolbox/dist';
 import { HttpClient } from '@angular/common/http';
@@ -25,7 +25,7 @@ export class AppService {
 
     constructor(protected http: HttpClient, protected configurationService: ConfigurationService, protected toastController: ToastController,
         protected platform: Platform, protected miscellaneousService: MiscellaneousService, protected barcodeScanner: BarcodeScanner,
-        protected loadingCtrl: LoadingController, public appVersion: AppVersion) {
+        protected loadingCtrl: LoadingController, protected alertCtrl: AlertController) {
     }
 
     setVariable(keys: any, applicationName: string, miscellaneousService: MiscellaneousService) {
@@ -226,42 +226,49 @@ export class AppService {
         }
     }
 
-    getLatestVersion(callbackSuccess: Function, callbackFailure: Function, versionFileUrl: string) {
-        if (versionFileUrl) {
-            this.http.get(versionFileUrl).subscribe(
-                (data: any) => {
-                    if (data && callbackSuccess) {
-                        callbackSuccess(data)
-                    } else {
-                        console.log("No data: " + versionFileUrl);
-                    }
-                },
-                (error: any) => {
-                    console.log(error);
-                    if (callbackFailure) {
-                        callbackFailure(error)
-                    }
+    getLatestVersion(callbackSuccess: Function, callbackFailure: Function) {
+        let url = this.versionFileUrl;
+        this.http.get(url).subscribe(
+            (data: any) => {
+                if (data && data.length > 0 && callbackSuccess) {
+                    callbackSuccess(data[0])
+                } else {
+                    console.log("No data: " + url);
                 }
-            );
-        }
+            },
+            (error: any) => {
+                console.log(error);
+                if (callbackFailure) {
+                    callbackFailure(error)
+                }
+            }
+        );
     }
 
-    checkVersion(callbackSuccess: Function, callbackFailure: Function, versionFileUrl: string) {
-        if (this.isMobileDevice()) {
-            this.getLatestVersion(
-                (data: any) => {
-                    this.appVersion.getVersionNumber().then((value: string) => {
-                        if (callbackSuccess) {
-                            callbackSuccess({ "appVersion": value, "latestVesrion": data });
-                        }
-                    });
-                },
-                (error: any) => {
-                    if (callbackFailure) {
-                        callbackFailure(error);
+    showAlertForm(callback: Function, title: string, buttons: any, values: any) {
+        if (values) {
+            let alert = this.alertCtrl.create();
+            alert.setTitle(title);
+
+            for (var i = 0; i < values.length; i++) {
+                alert.addInput({
+                    type: values[i].type,
+                    value: values[i],
+                    label: values[i].label,
+                    checked: values[i].checked
+                });
+            }
+
+            for (var i = 0; i < buttons.length; i++) {
+                alert.addButton({
+                    text: buttons[i].label,
+                    handler: data => {
+                        callback(data);
                     }
-                }, versionFileUrl
-            )
+                });
+            }
+
+            alert.present();
         }
     }
 }

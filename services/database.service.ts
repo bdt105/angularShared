@@ -83,7 +83,16 @@ export class DatabaseService {
         );
     }
 
-    loadQuery(callbackSuccess: Function, callbackFailure: Function, sql: string, where: string,
+    loadQuerySql(callbackSuccess: Function, callbackFailure: Function, sql: string) {
+        this.loadQuery(callbackSuccess, callbackFailure, sql);
+    }
+
+    loadQuerySelect(callbackSuccess: Function, callbackFailure: Function, where: string = null,
+        offset: number = null, limit: number = null, orderBy: string = null, select: string = null, groupby: string = null, extra: string = null) {
+        this.loadQuery(callbackSuccess, callbackFailure, null, where, offset, limit, orderBy, select, groupby, extra);
+    }
+
+    private loadQuery(callbackSuccess: Function, callbackFailure: Function, sql: string, where: string = null,
         offset: number = null, limit: number = null, orderBy: string = null, select: string = null, groupby: string = null, extra: string = null) {
 
         let body: any =

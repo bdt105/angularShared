@@ -5,6 +5,7 @@ import { ToastController, LoadingController, Platform } from 'ionic-angular';
 import { BarcodeScanner } from '@ionic-native/barcode-scanner';
 import { Toolbox } from 'bdt105toolbox/dist';
 import { HttpClient } from '@angular/common/http';
+import { AppVersion } from '@ionic-native/app-version';
 
 @Injectable()
 export class Keys {
@@ -22,8 +23,9 @@ export class AppService {
 
     protected toolbox: Toolbox = new Toolbox();
 
-    constructor(protected http: HttpClient, protected configurationService: ConfigurationService, protected toastController: ToastController, protected platform: Platform,
-        protected miscellaneousService: MiscellaneousService, protected barcodeScanner: BarcodeScanner, protected loadingCtrl: LoadingController) {
+    constructor(protected http: HttpClient, protected configurationService: ConfigurationService, protected toastController: ToastController,
+        protected platform: Platform, protected miscellaneousService: MiscellaneousService, protected barcodeScanner: BarcodeScanner,
+        protected loadingCtrl: LoadingController, public appVersion: AppVersion) {
     }
 
     setVariable(keys: any, applicationName: string, miscellaneousService: MiscellaneousService) {
@@ -35,7 +37,7 @@ export class AppService {
         this.applicationName = applicationName;
         miscellaneousService.currentLanguage = lang ? lang : null;
     }
-    
+
     loadConfiguration() {
         this.configurationService.load(this.keys.configurationKey, "./assets/configuration.json", false);
     }
@@ -44,7 +46,7 @@ export class AppService {
         this.configurationService.load(this.keys.translateKey, "./assets/translation.json", false);
     }
 
-    getApplicationName(){
+    getApplicationName() {
         return this.applicationName;
     }
 
@@ -112,7 +114,7 @@ export class AppService {
         }).catch(err => {
             console.log('Error', err);
         });
-        
+
 
     }
 
@@ -121,7 +123,7 @@ export class AppService {
             successPageParameters = {};
         }
         successPageParameters.scanText = "5dd01066401005";
-//        successPageParameters.scanText = "5601066401005";
+        //        successPageParameters.scanText = "5601066401005";
         if (pageOpenType == 0) {
             navController.setRoot(successPageToLoad, successPageParameters);
         } else {
@@ -188,8 +190,8 @@ export class AppService {
         return this.platform.is('mobile') || this.platform.is('cordova');
     }
 
-    isHorizontal(){
-        return this.platform.isLandscape(); 
+    isHorizontal() {
+        return this.platform.isLandscape();
         //this.screenOrientation.type == 'landscape';// this.screenOrientation.ORIENTATIONS.LANDSCAPE;
     }
 
@@ -224,22 +226,42 @@ export class AppService {
         }
     }
 
-    getLatestVersion(callbackSuccess: Function, callbackFailure: Function) {
-        let url = this.versionFileUrl;
-        this.http.get(url).subscribe(
-            (data: any) => {
-                if (data && data.length > 0 && callbackSuccess) {
-                    callbackSuccess(data[0])
-                }else{
-                    console.log("No data: " + url);
+    getLatestVersion(callbackSuccess: Function, callbackFailure: Function, versionFileUrl: string) {
+        if (versionFileUrl) {
+            this.http.get(versionFileUrl).subscribe(
+                (data: any) => {
+                    if (data && callbackSuccess) {
+                        callbackSuccess(data)
+                    } else {
+                        console.log("No data: " + versionFileUrl);
+                    }
+                },
+                (error: any) => {
+                    console.log(error);
+                    if (callbackFailure) {
+                        callbackFailure(error)
+                    }
                 }
-            },
-            (error: any) => {
-                console.log(error);
-                if (callbackFailure) {
-                    callbackFailure(error)
-                }
-            }
-        );
-    }    
+            );
+        }
+    }
+
+    checkVersion(callbackSuccess: Function, callbackFailure: Function, versionFileUrl: string) {
+        if (this.isMobileDevice()) {
+            this.getLatestVersion(
+                (data: any) => {
+                    this.appVersion.getVersionNumber().then((value: string) => {
+                        if (callbackSuccess) {
+                            callbackSuccess({ "appVersion": value, "latestVesrion": data });
+                        }
+                    });
+                },
+                (error: any) => {
+                    if (callbackFailure) {
+                        callbackFailure(error);
+                    }
+                }, versionFileUrl
+            )
+        }
+    }
 }

@@ -5,7 +5,6 @@ import { ToastController, LoadingController, Platform, AlertController } from 'i
 import { BarcodeScanner } from '@ionic-native/barcode-scanner';
 import { Toolbox } from 'bdt105toolbox/dist';
 import { HttpClient } from '@angular/common/http';
-import { AppVersion } from '@ionic-native/app-version';
 
 @Injectable()
 export class Keys {
@@ -18,7 +17,6 @@ export class AppService {
 
     protected keys: Keys;
 
-    protected versionFileUrl = "./assets/version.json";
     protected applicationName: string;
 
     protected toolbox: Toolbox = new Toolbox();
@@ -226,14 +224,13 @@ export class AppService {
         }
     }
 
-    getLatestVersion(callbackSuccess: Function, callbackFailure: Function) {
-        let url = this.versionFileUrl;
-        this.http.get(url).subscribe(
+    getLatestVersion(callbackSuccess: Function, callbackFailure: Function, versionFileUrl: string) {
+        this.http.get(versionFileUrl).subscribe(
             (data: any) => {
                 if (data && data.length > 0 && callbackSuccess) {
                     callbackSuccess(data[0])
                 } else {
-                    console.log("No data: " + url);
+                    console.log("No data: " + versionFileUrl);
                 }
             },
             (error: any) => {
@@ -259,9 +256,9 @@ export class AppService {
                 });
             }
 
-            for (var i = 0; i < buttons.length; i++) {
+            for (var i1 = 0; i1 < buttons.length; i1++) {
                 alert.addButton({
-                    text: buttons[i].label,
+                    text: buttons[i1].label,
                     handler: data => {
                         callback(data);
                     }

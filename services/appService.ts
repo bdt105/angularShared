@@ -156,7 +156,7 @@ export class AppService {
         }
     }
 
-    formatDate(date: String) {
+    formatDate(date: string) {
         return date;
     }
 

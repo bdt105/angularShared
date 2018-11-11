@@ -7,12 +7,12 @@ import { Toolbox } from 'bdt105toolbox/dist';
 export class DatabaseService {
 
     protected toolbox: Toolbox = new Toolbox();
-    protected token: string;
-    protected baseUrl: string;
+    public token: string;
+    public baseUrl: string;
 
-    constructor(public http: HttpClient, token: string, baseUrl: string) {
-        this.token = token
-        this.baseUrl = baseUrl
+    constructor(public http: HttpClient/*, token: string, baseUrl: string*/) {
+        // this.token = token
+        // this.baseUrl = baseUrl
     }
 
     newRecord(callbackSuccess: Function, callbackFailure: Function, tableName: string) {

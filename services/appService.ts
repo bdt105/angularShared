@@ -9,6 +9,7 @@ import { HttpClient } from '@angular/common/http';
 @Injectable()
 export class Keys {
     configurationKey: string;
+    settingKey: string;
     translateKey: string;
     connexionKey: string;
 }
@@ -31,7 +32,8 @@ export class AppService {
         miscellaneousService.configurationKey = this.keys.configurationKey;
         miscellaneousService.translateKey = this.keys.translateKey;
         miscellaneousService.connexionKey = this.keys.connexionKey;
-        let lang = this.getCurrentLaguage();
+        miscellaneousService.settingKey = this.keys.settingKey;
+        let lang = this.getCurrentLanguage();
         this.applicationName = applicationName;
         miscellaneousService.currentLanguage = lang ? lang : null;
     }
@@ -54,16 +56,20 @@ export class AppService {
     }
 
     setLanguage(language: string) {
-        let conn = this.toolbox.readFromStorage(this.keys.connexionKey, true);
-        if (conn) {
-            conn.language = language;
+        if (this.keys.settingKey) {
+            let conn = this.toolbox.readFromStorage(this.keys.settingKey, true);
+            if (conn) {
+                conn.language = language;
+            }
+            this.toolbox.writeToStorage(this.keys.settingKey, conn, true);
         }
-        this.toolbox.writeToStorage(this.keys.connexionKey, conn, true);
     }
 
-    getCurrentLaguage() {
-        let lang = this.toolbox.readFromStorage(this.keys.connexionKey, true);
-        return lang ? lang.language : null;
+    getCurrentLanguage() {
+        if (this.keys.settingKey) {
+            let lang = this.toolbox.readFromStorage(this.keys.settingKey, true);
+            return lang ? lang.language : null;
+        }
     }
 
     getToken() {

@@ -9,6 +9,7 @@ export class MiscellaneousService {
 
     private toolbox: Toolbox = new Toolbox();
     public configurationKey: string;
+    public settingKey: string;
     public translateKey: string;
     public connexionKey: string;
     public currentLanguage: any;

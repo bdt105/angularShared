@@ -247,8 +247,9 @@ export class AppService {
             }
         );
     }
-
-    showAlertForm(callback: Function, title: string, buttons: any, values: any) {
+ 
+    
+    showAlertForm(title: string, buttons: any, values: any) {
         if (values) {
             let alert = this.alertCtrl.create();
             alert.setTitle(title);
@@ -265,9 +266,7 @@ export class AppService {
             for (var i1 = 0; i1 < buttons.length; i1++) {
                 alert.addButton({
                     text: buttons[i1].label,
-                    handler: data => {
-                        callback(data);
-                    }
+                    handler: buttons[i1].callback
                 });
             }
 

@@ -34,7 +34,7 @@ export class GoogleService {
             .catch(err => {
                 callbackFailure(err);
             }
-        );
+            );
     }
 
     logoutMobile(callbackSuccess: Function, callbackFailure: Function) {

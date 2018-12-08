@@ -14,6 +14,7 @@ export class Keys {
     connexionKey: string;
 }
 
+@Injectable()
 export class AppService {
 
     protected keys: Keys;
@@ -118,8 +119,14 @@ export class AppService {
         }).catch(err => {
             console.log('Error', err);
         });
+    }
 
-
+    scanSimple(callback: any) {
+        this.barcodeScanner.scan().then((barcodeData: any) => {
+            callback(barcodeData, null);
+        }).catch(err => {
+            callback(null, err);
+        });
     }
 
     scanFake(navController: any, successPageToLoad: any, successPageParameters: any, failurePageToLoad: any, failurePageParameters: any, pageOpenType: number = 0) {
@@ -247,8 +254,8 @@ export class AppService {
             }
         );
     }
- 
-    
+
+
     showAlertForm(title: string, buttons: any, values: any) {
         if (values) {
             let alert = this.alertCtrl.create();

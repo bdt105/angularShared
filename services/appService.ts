@@ -58,10 +58,11 @@ export class AppService {
 
     setLanguage(language: string) {
         if (this.keys.settingKey) {
-            let conn = this.toolbox.readFromStorage(this.keys.settingKey, true);
-            if (conn) {
-                conn.language = language;
+            let conn: any = this.toolbox.readFromStorage(this.keys.settingKey, true);
+            if (!conn) {
+                conn = {};
             }
+            conn.language = language;
             this.toolbox.writeToStorage(this.keys.settingKey, conn, true);
         }
     }

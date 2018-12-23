@@ -14,7 +14,11 @@ export class GoogleService {
     google: any;
 
     constructor(private googlePlus: GooglePlus) {
-        this.google = new Google(gapi);
+        try {
+            //this.google = new Google(null);
+        } catch (error) {
+            console.error(error);
+        }
     }
 
     logoutWeb(callbackSuccess: Function, callbackFailure: Function) {

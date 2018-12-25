@@ -283,6 +283,7 @@ export class AppService {
         }
     }
 
+<<<<<<< HEAD
     getSetting(name: string) {
         let settings = this.toolbox.readFromStorage(this.miscellaneousService.settingKey, true);
         return settings ? settings[name] : null;
@@ -299,6 +300,8 @@ export class AppService {
         }
     }
 
+=======
+>>>>>>> c61ecc678b1f5ef67f316d51d5629575a2f4d2e1
     getImage(callback: Function, source: number, imageQuality: number, imageAllowEdit: boolean) {
         let sou = source == 0 ? this.camera.PictureSourceType.CAMERA : this.camera.PictureSourceType.PHOTOLIBRARY;
         // alert(this.settingService.getItemPlusImageQuality());

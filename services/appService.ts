@@ -5,6 +5,7 @@ import { ToastController, LoadingController, Platform, AlertController } from 'i
 import { BarcodeScanner } from '@ionic-native/barcode-scanner';
 import { Toolbox } from 'bdt105toolbox/dist';
 import { HttpClient } from '@angular/common/http';
+import { Camera, CameraOptions } from '@ionic-native/camera';
 
 @Injectable()
 export class Keys {
@@ -25,7 +26,7 @@ export class AppService {
 
     constructor(protected http: HttpClient, protected configurationService: ConfigurationService, protected toastController: ToastController,
         protected platform: Platform, protected miscellaneousService: MiscellaneousService, protected barcodeScanner: BarcodeScanner,
-        protected loadingCtrl: LoadingController, protected alertCtrl: AlertController) {
+        protected loadingCtrl: LoadingController, protected alertCtrl: AlertController, protected camera: Camera) {
     }
 
     setVariable(keys: any, applicationName: string, miscellaneousService: MiscellaneousService) {
@@ -296,5 +297,24 @@ export class AppService {
             conn[name] = value;
             this.toolbox.writeToStorage(this.keys.settingKey, conn, true);
         }
+    }
+
+    getImage(callback: Function, source: number, imageQuality: number, imageAllowEdit: boolean) {
+        let sou = source == 0 ? this.camera.PictureSourceType.CAMERA : this.camera.PictureSourceType.PHOTOLIBRARY;
+        // alert(this.settingService.getItemPlusImageQuality());
+        // let quality: number = Number.parseInt(this.settingService.getItemPlusImageQuality());
+        // let allowEdit: boolean = this.settingService.getItemPlusImageEdit();
+        const options: CameraOptions = {
+            quality: imageQuality ? imageQuality : 50,
+            destinationType: this.camera.DestinationType.FILE_URI,
+            sourceType: sou,
+            allowEdit: imageAllowEdit
+        }
+        
+        this.camera.getPicture(options).then((imageData) => {
+            callback(imageData, null)
+        }, (err) => {
+            callback(null, err);
+        });
     }
 }

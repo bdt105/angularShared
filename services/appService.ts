@@ -281,4 +281,20 @@ export class AppService {
             alert.present();
         }
     }
+
+    getSetting(name: string) {
+        let settings = this.toolbox.readFromStorage(this.miscellaneousService.settingKey, true);
+        return settings ? settings[name] : null;
+    }
+
+    setSetting(name: string, value: any) {
+        if (this.keys.settingKey) {
+            let conn: any = this.toolbox.readFromStorage(this.keys.settingKey, true);
+            if (!conn) {
+                conn = {};
+            }
+            conn[name] = value;
+            this.toolbox.writeToStorage(this.keys.settingKey, conn, true);
+        }
+    }
 }

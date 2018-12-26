@@ -6,7 +6,7 @@ import { BarcodeScanner } from '@ionic-native/barcode-scanner';
 import { Toolbox } from 'bdt105toolbox/dist';
 import { HttpClient } from '@angular/common/http';
 import { Camera, CameraOptions } from '@ionic-native/camera';
-
+ 
 @Injectable()
 export class Keys {
     configurationKey: string;
@@ -283,41 +283,41 @@ export class AppService {
         }
     }
 
-<<<<<<< HEAD
-    getSetting(name: string) {
-        let settings = this.toolbox.readFromStorage(this.miscellaneousService.settingKey, true);
-        return settings ? settings[name] : null;
-    }
-
-    setSetting(name: string, value: any) {
-        if (this.keys.settingKey) {
-            let conn: any = this.toolbox.readFromStorage(this.keys.settingKey, true);
-            if (!conn) {
-                conn = {};
-            }
-            conn[name] = value;
-            this.toolbox.writeToStorage(this.keys.settingKey, conn, true);
-        }
-    }
-
-=======
->>>>>>> c61ecc678b1f5ef67f316d51d5629575a2f4d2e1
-    getImage(callback: Function, source: number, imageQuality: number, imageAllowEdit: boolean) {
+    getImage(callback: Function, source: number, imageQuality: number = 50, imageAllowEdit: boolean = false, saveToPhotoAlbum: boolean = true) {
         let sou = source == 0 ? this.camera.PictureSourceType.CAMERA : this.camera.PictureSourceType.PHOTOLIBRARY;
         // alert(this.settingService.getItemPlusImageQuality());
         // let quality: number = Number.parseInt(this.settingService.getItemPlusImageQuality());
         // let allowEdit: boolean = this.settingService.getItemPlusImageEdit();
         const options: CameraOptions = {
-            quality: imageQuality ? imageQuality : 50,
+            quality: imageQuality,
             destinationType: this.camera.DestinationType.FILE_URI,
             sourceType: sou,
-            allowEdit: imageAllowEdit
+            allowEdit: imageAllowEdit,
+            saveToPhotoAlbum: saveToPhotoAlbum
         }
         
         this.camera.getPicture(options).then((imageData) => {
+            this.camera.getPicture()
             callback(imageData, null)
         }, (err) => {
             callback(null, err);
         });
+    }
+
+    getSetting(name: string){
+        let setting = this.toolbox.readFromStorage(name, true);
+        if (setting){
+            return setting[name];
+        }
+        return null;
+    }
+
+    setSetting(name: string, value: any, forever: boolean = true){
+        let setting = this.toolbox.readFromStorage(name, true);
+        if (!setting){
+            setting = {};
+        }
+        setting[name] = value;
+        this.toolbox.writeToStorage(name, setting, forever);
     }
 }

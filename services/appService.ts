@@ -268,6 +268,7 @@ export class AppService {
                     type: values[i].type,
                     value: values[i],
                     label: values[i].label,
+                    placeholder: values[i].placeholder,
                     checked: values[i].checked
                 });
             }

@@ -85,10 +85,10 @@ export class AppService {
         // return this.configurationService.get(this.configurationKey);
     }
 
-    callbackToast(data: any, message: string) {
+    callbackToast(data: any, message: string, duration: number = 2000) {
         this.toastController.create({
             message: message,
-            duration: 2000,
+            duration: duration,
             position: 'bottom'
         }).present();
     }

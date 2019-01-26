@@ -15,7 +15,7 @@ export class GoogleService {
 
     constructor(private googlePlus: GooglePlus) {
         try {
-            //this.google = new Google(null);
+            this.google = new Google(gapi);
         } catch (error) {
             console.error(error);
         }

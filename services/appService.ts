@@ -283,11 +283,7 @@ export class AppService {
         }
     }
 
-<<<<<<< HEAD
-    getImage(callback: Function, source: number, imageQuality: number, imageAllowEdit: boolean) {
-=======
     getImage(callback: Function, source: number, imageQuality: number = 50, imageAllowEdit: boolean = false, saveToPhotoAlbum: boolean = true) {
->>>>>>> 23ae0971892eefd863526f5849bf5c9ebcfff77e
         let sou = source == 0 ? this.camera.PictureSourceType.CAMERA : this.camera.PictureSourceType.PHOTOLIBRARY;
         // alert(this.settingService.getItemPlusImageQuality());
         // let quality: number = Number.parseInt(this.settingService.getItemPlusImageQuality());

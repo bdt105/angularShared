@@ -326,7 +326,6 @@ export class AppService {
         }
         
         this.camera.getPicture(options).then((imageData) => {
-            this.camera.getPicture()
             callback(imageData, null)
         }, (err) => {
             callback(null, err);

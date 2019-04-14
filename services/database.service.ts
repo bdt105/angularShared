@@ -83,8 +83,18 @@ export class DatabaseService {
         );
     }
 
+    loadTable1(callback: Function, tableName: string, where: string,
+        offset: number = null, limit: number = null, searchTerm: string = null, orderBy: string = null, select: string = null) {
+        this.loadTable((data: any) => callback(data, null), (error: any) => callback(null, error), tableName, where,
+            offset, limit, searchTerm, orderBy, select)
+    }
+
     loadQuerySql(callbackSuccess: Function, callbackFailure: Function, sql: string) {
         this.loadQuery(callbackSuccess, callbackFailure, sql);
+    }
+
+    loadQuerySql1(callback: Function, sql: string) {
+        this.loadQuery((data: any) => callback(data, null), (error: any) => callback(null, error), sql);
     }
 
     loadQuerySelect(callbackSuccess: Function, callbackFailure: Function, where: string = null,

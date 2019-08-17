@@ -68,6 +68,34 @@ export class AppService {
         }
     }
 
+    setDefaultSetting(name: string, value: any){
+        if (this.keys.settingKey) {
+            let conn: any = this.toolbox.readFromStorage(this.keys.settingKey, true);
+            if (!conn) {
+                conn = {};
+            }
+            conn[name] = value;
+            this.toolbox.writeToStorage(this.keys.settingKey, conn, true);
+        }
+    }
+
+    getDefaultSetting(name: string){
+        if (this.keys.settingKey) {
+            let conn: any = this.toolbox.readFromStorage(this.keys.settingKey, true);
+            if (conn) {
+                return conn[name];
+            }
+        }
+        return null;
+    }
+
+    getDefaultSettings(){
+        if (this.keys.settingKey) {
+            return this.toolbox.readFromStorage(this.keys.settingKey, true);
+        }
+        return null;
+    }
+
     getCurrentLanguage() {
         if (this.keys.settingKey) {
             let lang = this.toolbox.readFromStorage(this.keys.settingKey, true);
@@ -301,7 +329,6 @@ export class AppService {
         }
 
         this.camera.getPicture(options).then((imageData) => {
-            this.camera.getPicture()
             callback(imageData, null)
         }, (err) => {
             callback(null, err);

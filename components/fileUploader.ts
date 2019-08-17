@@ -30,7 +30,7 @@ export class FileUploaderComponent extends GenericComponent {
 
     @Input('buttonType') buttonType: 'button' | 'icon' = 'icon';
 
-    @Input('icon') icon: string = 'cloud-upload';
+    @Input('icon') icon: string = 'share';
 
     // @Input('onUploadSuccess') onUploadSuccess: (file: File, response: any) => void
     //     = function (file: File, response: any) {

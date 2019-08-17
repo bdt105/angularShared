@@ -6,7 +6,7 @@ import { BarcodeScanner } from '@ionic-native/barcode-scanner';
 import { Toolbox } from 'bdt105toolbox/dist';
 import { HttpClient } from '@angular/common/http';
 import { Camera, CameraOptions } from '@ionic-native/camera';
- 
+
 @Injectable()
 export class Keys {
     configurationKey: string;
@@ -258,10 +258,13 @@ export class AppService {
     }
 
 
-    showAlertForm(title: string, buttons: any, values: any) {
+    showAlertForm(title: string, buttons: any, values: any, subTitle: string = null) {
         if (values) {
             let alert = this.alertCtrl.create();
             alert.setTitle(title);
+            if (subTitle) {
+                alert.setSubTitle(subTitle);
+            }
 
             for (var i = 0; i < values.length; i++) {
                 alert.addInput({
@@ -296,7 +299,7 @@ export class AppService {
             allowEdit: imageAllowEdit,
             saveToPhotoAlbum: saveToPhotoAlbum
         }
-        
+
         this.camera.getPicture(options).then((imageData) => {
             this.camera.getPicture()
             callback(imageData, null)
@@ -305,17 +308,17 @@ export class AppService {
         });
     }
 
-    getSetting(name: string){
+    getSetting(name: string) {
         let setting = this.toolbox.readFromStorage(name, true);
-        if (setting){
+        if (setting) {
             return setting[name];
         }
         return null;
     }
 
-    setSetting(name: string, value: any, forever: boolean = true){
+    setSetting(name: string, value: any, forever: boolean = true) {
         let setting = this.toolbox.readFromStorage(name, true);
-        if (!setting){
+        if (!setting) {
             setting = {};
         }
         setting[name] = value;

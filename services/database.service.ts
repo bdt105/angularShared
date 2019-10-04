@@ -97,9 +97,14 @@ export class DatabaseService {
         this.loadQuery((data: any) => callback(data, null), (error: any) => callback(null, error), sql);
     }
 
-    loadQuerySelect(callbackSuccess: Function, callbackFailure: Function, where: string = null,
+    loadQuerySelect(callbackSuccess: Function, callbackFailure: Function, sql: string = null, where: string = null,
         offset: number = null, limit: number = null, orderBy: string = null, select: string = null, groupby: string = null, extra: string = null) {
-        this.loadQuery(callbackSuccess, callbackFailure, null, where, offset, limit, orderBy, select, groupby, extra);
+        this.loadQuery(callbackSuccess, callbackFailure, sql, where, offset, limit, orderBy, select, groupby, extra);
+    }
+
+    loadQuerySelect1(callback: Function, sql: string = null, where: string = null,
+        offset: number = null, limit: number = null, orderBy: string = null, select: string = null, groupby: string = null, extra: string = null) {
+        this.loadQuery((data: any) => callback(data, null), (error: any) => callback(null, error), sql, where, offset, limit, orderBy, select, groupby, extra);
     }
 
     private loadQuery(callbackSuccess: Function, callbackFailure: Function, sql: string, where: string = null,
